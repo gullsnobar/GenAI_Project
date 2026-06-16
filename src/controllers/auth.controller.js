@@ -1,6 +1,7 @@
 const userModel = require("../model/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const tokenBlacklistModel = require("../model/blacklist.model")
 
 
 /**
@@ -120,8 +121,21 @@ async function loginUserController(req, res){
     });
 }
 
+async function logoutUserController(req, res) {
+    const token = req.cookies.token
+
+    if(token) {
+        // Add token to blacklist
+        await tokenBlacklistModel.create({ token })
+        // Clear token from cookie
+        res.clearCookie("token")
+    }
+
+    res.json({ message: "Logged out successfully" })
+}
 
 module.exports = {
     registerUserController,
-    loginUserController
+    loginUserController,
+    logoutUserController
 };
