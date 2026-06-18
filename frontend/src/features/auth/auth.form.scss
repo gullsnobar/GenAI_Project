@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ============================================================
 // Auth Forms — shared styles for Login & Register
 // Builds on the original structure (main > .form-container > form > .input-group)
@@ -206,7 +208,7 @@ main {
       }
 
       &:hover {
-        background: darken($color-field-bg, 2%);
+        background: color.adjust($color-field-bg, $lightness: -2%);
       }
 
       &:focus {
@@ -354,7 +356,7 @@ main {
 
     &:hover:not(:disabled) {
       background: #fafafa;
-      border-color: darken($color-border, 8%);
+      border-color: color.adjust($color-border, $lightness: -8%);
     }
   }
 

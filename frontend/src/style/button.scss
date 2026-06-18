@@ -1,18 +1,452 @@
-.button {
-    border: none;
-    overflow: none;
-    padding-inline: 1.5rem;
-    padding-block: 0.75rem;
-    border-radius: 1rem;
+// ============================================================
+// Auth Forms — shared styles for Login & Register
+// Builds on the original structure (main > .form-container > form > .input-group)
+// Design tokens are at the top so the theme (color, radius, etc.) can be
+// retuned from one place.
+// ============================================================
+
+@use "sass:color";
+
+// ---- Design tokens -----------------------------------------
+$color-bg:            #f6f7fb;
+$color-surface:       #ffffff;
+$color-field-bg:       #f3f4f6;
+$color-field-bg-focus: #ffffff;
+$color-border:        #e3e6ec;
+
+$color-text:          #111827;
+$color-text-muted:    #6b7280;
+$color-text-faint:    #9ca3af;
+
+// Brand color — matches the project's global .primary-button background.
+// $color-primary stays at full brand saturation for backgrounds, borders,
+// and other non-text UI (icons, focus rings, checkbox accent).
+// $color-primary-dark is a darkened derivative used anywhere the color
+// sits behind *text* (links), since the raw brand green is too light
+// for comfortable text contrast on a white background.
+$color-primary:       #0d7ef0;
+$color-primary-dark:  color.adjust($color-primary, $lightness: -18%);
+
+$color-danger:        #dc2626;
+$color-danger-soft:   #fef2f2;
+$color-success:       $color-primary;
+$color-warning:       #d97706;
+
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  20px;
+
+$shadow-card:  0 20px 45px -15px rgba(17, 24, 39, 0.16), 0 0 0 1px rgba(17, 24, 39, 0.04);
+$shadow-focus: 0 0 0 4px rgba(39, 215, 4, 0.18);
+
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+main {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: $color-bg;
+  font-family: $font-family;
+  position: relative;
+  overflow: hidden;
+
+  // Soft ambient blobs behind the card — subtle, not loud
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &::before {
+    width: 480px;
+    height: 480px;
+    top: -160px;
+    left: -120px;
+    background: radial-gradient(circle, rgba(39, 215, 4, 0.18), transparent 70%);
+  }
+
+  &::after {
+    width: 420px;
+    height: 420px;
+    bottom: -140px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(39, 215, 4, 0.13), transparent 70%);
+  }
+
+  .form-container {
+    position: relative;
+    z-index: 1;
+    min-width: 350px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: $color-surface;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-card;
+    padding: 2.5rem 2.25rem 2rem;
+    animation: card-in 420ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    // Brand mark
+    .auth-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: $radius-sm;
+      background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      margin: 0 auto 0.25rem;
+      box-shadow: 0 8px 16px -6px rgba(39, 215, 4, 0.45);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: $color-text;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      margin: -0.5rem 0 0;
+      font-size: 14.5px;
+      color: $color-text-muted;
+      text-align: center;
+    }
+  }
+
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  // One labeled field (label + input + optional error)
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: $color-text;
+    }
+
+    // Wraps the <input> so icons / the password toggle can be
+    // positioned absolutely without affecting the layout above.
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .input-icon {
+        position: absolute;
+        left: 13px;
+        display: flex;
+        color: $color-text-faint;
+        pointer-events: none;
+        transition: color $transition-fast;
+      }
+
+      input {
+        width: 100%;
+      }
+
+      input:focus ~ .input-icon {
+        color: $color-primary;
+      }
+
+      .input-trailing-btn {
+        position: absolute;
+        right: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent;
+        color: $color-text-faint;
+        border-radius: $radius-sm;
+        cursor: pointer;
+        transition: color $transition-fast, background $transition-fast;
+
+        &:hover {
+          color: $color-text-muted;
+          background: rgba(17, 24, 39, 0.05);
+        }
+
+        &:focus-visible {
+          outline: 2px solid $color-primary;
+          outline-offset: 1px;
+        }
+      }
+
+      &.has-icon input {
+        padding-left: 2.5rem;
+      }
+
+      &.has-trailing input {
+        padding-right: 2.5rem;
+      }
+    }
+
+    input {
+      border: 1.5px solid transparent;
+      outline: none;
+      padding-inline: 1rem;
+      padding-block: 0.75rem;
+      border-radius: 1rem;
+      font-size: 15px;
+      font-family: inherit;
+      color: $color-text;
+      background: $color-field-bg;
+      transition: background $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+
+      &::placeholder {
+        color: $color-text-faint;
+      }
+
+      &:hover {
+        background: color.adjust($color-field-bg, $lightness: -2%);
+      }
+
+      &:focus {
+        background: $color-field-bg-focus;
+        border-color: $color-primary;
+        box-shadow: $shadow-focus;
+      }
+    }
+
+    &.has-error {
+      .input-wrapper input,
+      input {
+        border-color: $color-danger;
+        background: $color-danger-soft;
+
+        &:focus {
+          box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+        }
+      }
+    }
+  }
+
+  .field-error {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    color: $color-danger;
+    animation: field-error-in 150ms ease-out;
+  }
+
+  @keyframes field-error-in {
+    from { opacity: 0; transform: translateY(-2px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  // Password strength meter (register page)
+  .password-strength {
+    display: flex;
+    gap: 4px;
+    margin-top: 2px;
+
+    span {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: $color-border;
+      transition: background $transition-fast;
+    }
+
+    &[data-strength="1"] span:nth-child(1) { background: $color-danger; }
+    &[data-strength="2"] span:nth-child(-n+2) { background: $color-warning; }
+    &[data-strength="3"] span:nth-child(-n+3) { background: #16a34a; }
+    &[data-strength="4"] span { background: $color-success; }
+  }
+
+  .password-strength-label {
+    font-size: 12px;
+    color: $color-text-muted;
+  }
+
+  // Remember me / forgot password row
+  .form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -0.25rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: $color-text-muted;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
 
-    &.primary-button{
-        background-color: #27d704;
-        color: white;
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      accent-color: $color-primary;
+      cursor: pointer;
+      background: none;
+      padding: 0;
+    }
+  }
+
+  .text-link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: $color-primary-dark;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: color.adjust($color-primary-dark, $lightness: -8%);
+      text-decoration: underline;
     }
 
-    &:active{
-        transform: scale(0.98);
+    &:focus-visible {
+      outline: 2px solid $color-primary-dark;
+      outline-offset: 2px;
+      border-radius: 4px;
     }
+  }
+
+  // NOTE: border, background, color, radius, padding and the base
+  // transition/active-scale for .button and .primary-button already
+  // come from the project's global stylesheet — intentionally not
+  // duplicated here. This block only adds what that global class is
+  // missing for *this* use case: flex layout (for the icon/spinner),
+  // a hover treatment, and a disabled state.
+  .button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.94);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-dark;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+
+  // Secondary style not covered by the global button classes
+  .social-button {
+    background: $color-surface;
+    color: $color-text;
+    border: 1.5px solid $color-border;
+
+    &:hover:not(:disabled) {
+      background: #fafafa;
+      border-color: color.adjust($color-border, $lightness: -8%);
+      filter: none; // this button has its own hover treatment, not the brightness one above
+    }
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0.25rem 0;
+    color: $color-text-faint;
+    font-size: 12.5px;
+
+    &::before, &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $color-border;
+    }
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 14px;
+    color: $color-text-muted;
+  }
+
+  .auth-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 11px 13px;
+    border-radius: $radius-sm;
+    background: $color-danger-soft;
+    color: $color-danger;
+    font-size: 13.5px;
+    animation: field-error-in 180ms ease-out;
+  }
+}
+
+// ---- Responsive ------------------------------------------------------
+@media (max-width: 420px) {
+  main .form-container {
+    padding: 2rem 1.4rem 1.6rem;
+    border-radius: $radius-md;
+  }
+}
+
+// ---- Reduced motion ----------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  main {
+    .form-container,
+    .field-error,
+    .auth-alert {
+      animation: none !important;
+    }
+    .button,
+    .input-group input {
+      transition: none !important;
+    }
+  }
 }
