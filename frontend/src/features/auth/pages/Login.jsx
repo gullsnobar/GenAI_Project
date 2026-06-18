@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../auth.form.scss";
+import { useAuth } from "../hooks/useAuth";
 
 // --- Small inline icons (no extra dependency required) ---------------
 const MailIcon = () => (
@@ -52,10 +53,10 @@ const GoogleIcon = () => (
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
+  const { handleLogin, loading } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "", rememberMe: false });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
 
   const handleChange = (e) => {
@@ -82,16 +83,11 @@ const Login = () => {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    setIsSubmitting(true);
     setFormError("");
     try {
-      // TODO: replace with your real authentication call, e.g.
-      // await api.post("/auth/login", formData);
-      await new Promise((resolve) => setTimeout(resolve, 900));
-    } catch {
-      setFormError("We couldn't sign you in. Check your details and try again.");
-    } finally {
-      setIsSubmitting(false);
+      await handleLogin({ email: formData.email, password: formData.password });
+    } catch (error) {
+      setFormError(error?.message || "We couldn't sign you in. Check your details and try again.");
     }
   };
 
@@ -177,9 +173,9 @@ const Login = () => {
             <a className="text-link" href="/forgot-password">Forgot password?</a>
           </div>
 
-          <button type="submit" className="button primary-button" disabled={isSubmitting}>
-            {isSubmitting && <span className="spinner" />}
-            {isSubmitting ? "Signing in…" : "Sign in"}
+          <button type="submit" className="button primary-button" disabled={loading}>
+            {loading && <span className="spinner" />}
+            {loading ? "Signing in…" : "Sign in"}
           </button>
         </form>
 
