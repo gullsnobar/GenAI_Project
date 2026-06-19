@@ -14,17 +14,24 @@ export const useAuth = () => {
             setIsAuthenticated(true);
         } catch (error) {
             console.error("Login failed:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
     };
 
-
     const handleRegister = async ({ username, email, password}) => {
-        setLoading(true)
-        const data = await register({username, email, password})
-        setUser(data.user);
-        setIsAuthenticated(true);
+        setLoading(true);
+        try {
+            const data = await register({username, email, password});
+            setUser(data.user);
+            setIsAuthenticated(true);
+        } catch (error) {
+            console.error("Registration failed:", error);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
     }
 
     const handleLogout = async () => {
@@ -35,6 +42,7 @@ export const useAuth = () => {
             setIsAuthenticated(false);
         } catch (error) {
             console.error("Logout failed:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -45,8 +53,10 @@ export const useAuth = () => {
         try {
             const data = await getMe();
             setUser(data);
+            if (data) setIsAuthenticated(true);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
