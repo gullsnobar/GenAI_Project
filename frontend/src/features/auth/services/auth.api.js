@@ -18,6 +18,7 @@ export const register = async ({ email, password, username }) => {
         return data;
     } catch (error) {
         console.error("Register Error:", error?.response?.data || error.message);
+        throw error?.response?.data || error;
     }
 };
 
@@ -30,6 +31,7 @@ export const login = async ({ email, password }) => {
         return data;
     } catch (error) {
         console.error("Login Error:", error?.response?.data || error.message);
+        throw error?.response?.data || error;
     }
 };
 
@@ -39,6 +41,7 @@ export const logout = async () => {
         return data;
     } catch (error) {
         console.error("Logout Error:", error?.response?.data || error.message);
+        throw error?.response?.data || error;
     }
 };
 
@@ -48,5 +51,6 @@ export const getMe = async () => {
         return data;
     } catch (error) {
         console.error("GetMe Error:", error?.response?.data || error.message);
+        throw error?.response?.data || error;
     }
 };
