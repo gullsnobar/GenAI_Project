@@ -72,6 +72,21 @@ const interviewReportSchema = z.object({
         )
         .describe("Skills the job description requires or strongly prefers that the resume does not clearly demonstrate"),
 
+    preparationPlan: z
+        .array(
+            z.object({
+                topic: z.string().describe("A topic or area the candidate should prepare, derived from the skill gaps and job description"),
+                actionItems: z
+                    .array(z.string())
+                    .describe("Concrete, specific actions the candidate should take to prepare on this topic — not generic advice"),
+                estimatedTime: z.string().describe("Roughly how long this topic needs, e.g. '2-3 hours', '1 weekend'"),
+                resources: z
+                    .array(z.string())
+                    .describe("Specific resources to use — real courses, docs, repos, or practice platforms relevant to this topic")
+            })
+        )
+        .describe("A structured, prioritized study plan that directly addresses the skill gaps identified above"),
+
     matchScore: z
         .number()
         .min(0)
@@ -102,15 +117,12 @@ ${selfDescription}
 --- JOB DESCRIPTION ---
 ${jobDescription}
 
-Generate:
-1. Technical questions that probe the specific gap between what the resume
-   demonstrates and what the job description requires.
-2. Behavioural questions grounded in specifics from the resume and
-   self-description (real projects, real decisions, real trade-offs they
-   mentioned) — not generic "tell me about a time" filler.
-3. Skill gaps the job requires or strongly prefers that the resume does not
-   clearly demonstrate, with reasoning and a severity rating.
-4. An overall match score from 0–100.
+Generate a JSON object with exactly these keys:
+- "technicalQuestions": Technical questions that probe the specific gap between what the resume demonstrates and what the job description requires.
+- "behaviouralQuestions": Behavioural questions grounded in specifics from the resume and self-description (real projects, real decisions, real trade-offs they mentioned) — not generic "tell me about a time" filler.
+- "skillsGap": Skill gaps the job requires or strongly prefers that the resume does not clearly demonstrate, with reasoning and a severity rating.
+- "preparationPlan": A preparation plan that directly addresses the skill gaps from step 3 — each topic in the plan should map back to a specific gap, with concrete action items, a realistic time estimate, and specific resources (real docs, courses, or practice platforms, not vague suggestions like "read more about it").
+- "matchScore": An overall match score from 0–100.
 `.trim();
 }
 
@@ -130,21 +142,21 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
         throw new Error("resume, selfDescription, and jobDescription are all required");
     }
 
-    const responseSchema = zodToJsonSchema(interviewReportSchema, "interviewReportSchema");
+    const jsonSchema = zodToJsonSchema(interviewReportSchema);
+    delete jsonSchema.$schema;
 
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: buildPrompt({ resume, selfDescription, jobDescription }),
         config: {
             responseMimeType: "application/json",
-            responseSchema: responseSchema.definitions
-                ? responseSchema.definitions.interviewReportSchema
-                : responseSchema
+            responseSchema: jsonSchema
         }
     });
 
     let parsed;
     try {
+        console.log("Raw Gemini Response:", response.text);
         parsed = JSON.parse(response.text);
     } catch (err) {
         throw new Error(`Failed to parse Gemini response as JSON: ${err.message}`);
