@@ -1,0 +1,566 @@
+// ============================================================
+// Home (Interview Brief) — entry screen for generating a report
+// Warm cream background, serif display title, teal "Role" badge,
+// navy "You" badge, soft pastel tag chips, navy→teal CTA.
+// ============================================================
+
+@use "sass:color";
+@use "../../style/tokens" as *;
+
+html, body {
+  margin: 0;
+  // Prevent the vertical scrollbar from reserving/flashing layout space
+  // when content is exactly viewport height — only show it when content
+  // genuinely overflows.
+  overflow-x: hidden;
+}
+
+.home-page {
+  min-height: 100vh;
+  width: 100%;
+  background: $color-bg;
+  font-family: $font-body;
+  color: $color-text;
+  display: flex;
+  flex-direction: column;
+
+  // Faint dotted texture in the background corners, echoing the
+  // reference's subtle topographic/dot pattern — kept very quiet.
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(43, 38, 32, 0.05) 1px, transparent 0);
+  background-size: 22px 22px;
+  background-position: -11px -11px;
+}
+
+// ---- Top bar -------------------------------------------------
+.home-header {
+  flex-shrink: 0;
+
+  .home-header__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 32px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .home-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .home-header__mark {
+    color: $color-navy;
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .home-header__title {
+    font-family: $font-display;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: $color-text;
+    white-space: nowrap;
+  }
+
+  .home-header__meta {
+    text-align: right;
+  }
+
+  .home-header__readiness-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: $color-text-muted;
+    margin-bottom: 6px;
+  }
+
+  .home-header__readiness-track {
+    width: 160px;
+    height: 4px;
+    border-radius: $radius-pill;
+    background: $color-border;
+    margin-bottom: 8px;
+    overflow: hidden;
+    margin-left: auto;
+  }
+
+  .home-header__readiness-fill {
+    height: 100%;
+    border-radius: $radius-pill;
+    background: linear-gradient(90deg, $color-teal, $color-navy);
+    transition: width 300ms ease;
+  }
+
+  .home-header__tagline {
+    font-size: 13px;
+    color: $color-text-muted;
+    white-space: nowrap;
+  }
+}
+
+// ---- Body / card grid -----------------------------------------
+.home-body {
+  flex: 1;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+// ---- Card ----------------------------------------------------
+.home-card {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border;
+  box-shadow: $shadow-card;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-card__head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: $radius-pill;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.home-badge--role {
+  background: $color-teal;
+}
+
+.home-badge--you {
+  background: $color-navy;
+}
+
+.home-card__title {
+  font-family: $font-display;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: $color-text;
+}
+
+.home-card__subtitle {
+  font-size: 14px;
+  color: $color-text-muted;
+  margin: 0;
+  line-height: 1.55;
+  max-width: 380px;
+  margin-inline: auto;
+}
+
+.home-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+// ---- Form fields ------------------------------------------------
+.home-field {
+  width: 100%;
+  border: 1.5px solid $color-border;
+  outline: none;
+  padding: 16px 18px;
+  border-radius: $radius-md;
+  font-size: 14.5px;
+  font-family: inherit;
+  color: $color-text;
+  background: $color-surface-raised;
+  line-height: 1.65;
+  resize: none;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &::placeholder {
+    color: $color-text-faint;
+  }
+
+  &:focus {
+    border-color: $color-navy;
+    box-shadow: $shadow-focus;
+  }
+}
+
+.home-field--job {
+  flex: 1;
+  min-height: 320px;
+}
+
+.home-field--self {
+  min-height: 110px;
+}
+
+.home-field-meta {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: $color-text-faint;
+}
+
+.home-label {
+  display: block;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $color-text;
+  margin-bottom: 10px;
+
+  .home-label__required {
+    color: $color-navy;
+    margin-left: 4px;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ---- Resume upload --------------------------------------------
+.home-dropzone {
+  border-radius: $radius-md;
+  border: 1.5px dashed color.adjust($color-navy, $lightness: 35%);
+  background: color.adjust($color-navy, $lightness: 48%);
+  padding: 30px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    border-color: $color-navy;
+  }
+
+  &.is-dragging {
+    border-color: $color-navy;
+    background: color.adjust($color-navy, $lightness: 44%);
+  }
+
+  svg {
+    color: $color-navy;
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: $color-text;
+  }
+
+  .home-dropzone__hint {
+    font-size: 12px;
+    color: $color-text-faint;
+    margin-top: 4px;
+  }
+
+  .home-dropzone__link {
+    color: $color-navy;
+    font-weight: 700;
+  }
+}
+
+.home-file-input {
+  display: none;
+}
+
+.home-file-preview {
+  border-radius: $radius-md;
+  border: 1.5px solid $color-border;
+  background: $color-surface-raised;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .home-file-preview__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    background: color.adjust($color-navy, $lightness: 45%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $color-navy;
+  }
+
+  .home-file-preview__info {
+    flex: 1;
+    min-width: 0;
+
+    p {
+      margin: 0;
+    }
+
+    .home-file-preview__name {
+      font-size: 14px;
+      color: $color-text;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .home-file-preview__size {
+      font-size: 12px;
+      color: $color-text-faint;
+    }
+  }
+
+  .home-file-preview__remove {
+    color: $color-text-faint;
+    background: transparent;
+    border: none;
+    padding: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+      color: $color-text;
+      background: rgba(43, 38, 32, 0.06);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-navy;
+      outline-offset: 1px;
+    }
+  }
+}
+
+// ---- Tag chips (Passion / Prompting / Skills) ---------------------
+.home-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.home-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: $radius-pill;
+  font-size: 12.5px;
+  font-weight: 600;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.home-chip--passion {
+  background: $color-chip-passion-bg;
+  color: $color-chip-passion-text;
+}
+
+.home-chip--prompting {
+  background: $color-chip-prompting-bg;
+  color: $color-chip-prompting-text;
+}
+
+.home-chip--skills {
+  background: $color-chip-skills-bg;
+  color: $color-chip-skills-text;
+}
+
+// ---- Field group / status / CTA -----------------------------------
+.home-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  flex: 1;
+}
+
+.home-field-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.home-status {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-teal-dark;
+}
+
+.home-status--incomplete {
+  color: $color-text-faint;
+  font-weight: 500;
+}
+
+.home-cta {
+  height: 50px;
+  border-radius: $radius-sm;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  background: linear-gradient(120deg, $color-navy-dark, $color-navy, $color-teal-dark);
+  box-shadow: $shadow-cta;
+  transition: box-shadow $transition-fast, transform $transition-fast, opacity $transition-fast;
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-navy;
+    outline-offset: 2px;
+  }
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 14px 28px -10px rgba(29, 52, 97, 0.55);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    box-shadow: none;
+  }
+}
+
+.home-cta__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: home-spin 700ms linear infinite;
+}
+
+@keyframes home-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.home-hint {
+  font-size: 12.5px;
+  color: $color-text-faint;
+  text-align: center;
+  margin: 0;
+}
+
+// ---- Footer nav -------------------------------------------------------
+.home-footer {
+  flex-shrink: 0;
+  padding: 0 32px 28px;
+
+  .home-footer__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+  }
+
+  a {
+    font-size: 13px;
+    color: $color-text-muted;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-navy;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-navy;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  }
+}
+
+// ---- Responsive -------------------------------------------------
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-header__inner {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .home-header__readiness-track {
+    margin-left: 0;
+  }
+
+  .home-header__meta {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-footer__inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+// ---- Reduced motion -----------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .home-cta,
+  .home-field,
+  .home-dropzone,
+  .home-header__readiness-fill {
+    transition: none !important;
+  }
+
+  .home-cta__spinner {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,68 @@
+// ============================================================
+// Shared Design Tokens (_tokens.scss)
+// Shared across Auth and Home features to maintain a unified theme
+// ============================================================
+
+// Base Palette
+$color-bg:            #F9FAFB; // Cream/off-white background
+$color-surface:       #ffffff; // White cards
+$color-field-bg:      #F3F4F6;
+$color-field-bg-focus:#ffffff;
+$color-border:        #E5E7EB;
+
+// Text colors
+$color-text:          #111827; // Navy/dark text
+$color-text-muted:    #6B7280;
+$color-text-faint:    #9CA3AF;
+
+// Primary/Accent
+$color-primary:       #1E3A8A; // Navy Blue
+$color-primary-dark:  #1E40AF;
+$color-accent:        #0D9488; // Teal
+$color-accent-dark:   #0F766E;
+
+// Semantic
+$color-danger:        #DC2626;
+$color-danger-soft:   #FEF2F2;
+$color-success:       #16A34A;
+$color-warning:       #D97706;
+
+// Badge / Tag specific colors
+$color-tag-pink:      #BE185D; // Passion
+$color-tag-gray:      #4B5563; // Prompting
+$color-tag-blue:      #2563EB; // Skills
+
+// Radii
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  20px;
+$radius-full: 9999px;
+
+// Shadows
+$shadow-card:  0 20px 45px -15px rgba(30, 58, 138, 0.1), 0 0 0 1px rgba(30, 58, 138, 0.05);
+$shadow-focus: 0 0 0 4px rgba(30, 58, 138, 0.15);
+
+// Typography
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-serif: 'Georgia', 'Times New Roman', serif;
+
+// Transitions
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+// Semantic aliases required by home.scss
+$font-body: $font-family;
+$font-display: $font-serif;
+$radius-pill: 9999px;
+$color-navy: $color-primary;
+$color-navy-dark: $color-primary-dark;
+$color-teal: $color-accent;
+$color-teal-dark: $color-accent-dark;
+$color-surface-raised: #ffffff;
+$color-chip-passion-bg: rgba(190, 24, 93, 0.1);
+$color-chip-passion-text: #BE185D;
+$color-chip-prompting-bg: rgba(75, 85, 99, 0.1);
+$color-chip-prompting-text: #4B5563;
+$color-chip-skills-bg: rgba(37, 99, 235, 0.1);
+$color-chip-skills-text: #2563EB;
+$shadow-cta: 0 10px 20px -8px rgba(30, 58, 138, 0.55);
