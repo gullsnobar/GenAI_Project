@@ -30,18 +30,7 @@ authRouter.post("/login", authController.loginUserController)
 authRouter.get("/logout", authController.logoutUserController)
 
 
-async function logoutUserController(req, res) {
-    const token = req.cookies.token
 
-    if(token) {
-        // Add token to blacklist
-        await tokenBlacklistModel.create({ token })
-        // Clear token from cookie
-        res.clearCookie("token")
-    }
-
-    res.json({ message: "Logged out successfully" })
-}
 
 
 /**
