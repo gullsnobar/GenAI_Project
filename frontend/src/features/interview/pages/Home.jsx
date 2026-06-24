@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../home.scss";
+import "../style/home.scss";
 import { FileText, Upload, X, BookOpen, Sparkles, Wand2, Heart } from "lucide-react";
 
 /**
@@ -9,6 +10,7 @@ import { FileText, Upload, X, BookOpen, Sparkles, Wand2, Heart } from "lucide-re
  * Entry screen for generating an interview prep report.
  */
 const Home = () => {
+  const navigate = useNavigate();
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
@@ -68,6 +70,10 @@ const Home = () => {
       );
       
       console.log("Report generated successfully:", response.data);
+      const reportId = response.data?.data?._id;
+      if (reportId) {
+        navigate(`/interview/${reportId}`);
+      }
     } catch (error) {
       console.error("Generation failed:", error);
       alert(error?.response?.data?.error || error?.response?.data?.message || "Failed to generate report. Please try again.");
